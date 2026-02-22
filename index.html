@@ -166,7 +166,7 @@ nav.scrolled {
 .hero-name em {
   font-style: italic; color: var(--gold);
   background: linear-gradient(135deg, var(--gold), var(--gold2));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;background-clip: text; -webkit-text-fill-color: transparent;
 }
 .hero-title {
   font-size: clamp(1rem, 2vw, 1.3rem);
@@ -414,7 +414,7 @@ section { padding: 7rem 3rem; position: relative; z-index: 1; }
 .stat-num {
   font-family: 'Cormorant Garamond', serif; font-size: 3.5rem; font-weight: 700;
   background: linear-gradient(135deg, var(--gold), var(--gold2));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
   line-height: 1;
 }
 .stat-label { font-size: .78rem; color: var(--muted); margin-top: .5rem; letter-spacing: .05em; }
