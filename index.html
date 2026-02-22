@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Waris — Full Stack Developer</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg:       #0a0a0f;
+  --bg2:      #0f0f18;
+  --bg3:      #13131e;
+  --border:   rgba(255,255,255,0.07);
+  --gold:     #c9a84c;
+  --gold2:    #e8c96a;
+  --text:     #e8e6e0;
+  --muted:    rgba(232,230,224,0.45);
+  --accent:   #4f8ef7;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  line-height: 1.7;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ── Custom cursor ── */
+#cursor {
+  width: 10px; height: 10px;
+  background: var(--gold);
+  border-radius: 50%;
+  position: fixed; top: 0; left: 0;
+  pointer-events: none; z-index: 9999;
+  transform: translate(-50%,-50%);
+  transition: transform .15s ease, width .2s, height .2s, background .2s;
+  mix-blend-mode: screen;
+}
+#cursor-ring {
+  width: 36px; height: 36px;
+  border: 1px solid rgba(201,168,76,.4);
+  border-radius: 50%;
+  position: fixed; top: 0; left: 0;
+  pointer-events: none; z-index: 9998;
+  transform: translate(-50%,-50%);
+  transition: transform .35s cubic-bezier(.25,.46,.45,.94);
+}
+body:has(a:hover) #cursor,
+body:has(button:hover) #cursor { width: 20px; height: 20px; background: var(--gold2); }
+
+/* ── Noise texture overlay ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 0; opacity: .6;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 1.5rem 3rem;
+  display: flex; align-items: center; justify-content: space-between;
+  transition: background .4s, backdrop-filter .4s, padding .4s;
+}
+nav.scrolled {
+  background: rgba(10,10,15,.85);
+  backdrop-filter: blur(20px);
+  padding: 1rem 3rem;
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem; font-weight: 600;
+  color: var(--text); text-decoration: none;
+  letter-spacing: .02em;
+}
+.nav-logo span { color: var(--gold); }
+.nav-links { display: flex; gap: 2.5rem; list-style: none; }
+.nav-links a {
+  font-size: .8rem; font-weight: 500; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--muted);
+  text-decoration: none; transition: color .2s;
+  position: relative;
+}
+.nav-links a::after {
+  content: ''; position: absolute; bottom: -3px; left: 0;
+  width: 0; height: 1px; background: var(--gold);
+  transition: width .3s ease;
+}
+.nav-links a:hover { color: var(--gold); }
+.nav-links a:hover::after { width: 100%; }
+.nav-cta {
+  font-size: .78rem; font-weight: 500; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--bg);
+  background: var(--gold); border: none; border-radius: 2px;
+  padding: .6rem 1.5rem; cursor: none; transition: background .2s, transform .2s;
+  text-decoration: none;
+}
+.nav-cta:hover { background: var(--gold2); transform: translateY(-1px); }
+
+/* ── HERO ── */
+#hero {
+  min-height: 100vh;
+  display: flex; align-items: center;
+  padding: 8rem 3rem 4rem;
+  position: relative; overflow: hidden;
+}
+.hero-bg-lines {
+  position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  overflow: hidden;
+}
+.hero-bg-lines::before {
+  content: '';
+  position: absolute; top: -50%; right: -10%;
+  width: 70vw; height: 70vw;
+  border-radius: 50%;
+  border: 1px solid rgba(201,168,76,.06);
+  animation: rotateRing 40s linear infinite;
+}
+.hero-bg-lines::after {
+  content: '';
+  position: absolute; top: -30%; right: -5%;
+  width: 50vw; height: 50vw;
+  border-radius: 50%;
+  border: 1px solid rgba(79,142,247,.08);
+  animation: rotateRing 25s linear infinite reverse;
+}
+@keyframes rotateRing {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.hero-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 4rem; align-items: center;
+  max-width: 1200px; margin: 0 auto; width: 100%;
+  position: relative; z-index: 1;
+}
+.hero-tag {
+  display: inline-flex; align-items: center; gap: .6rem;
+  font-family: 'DM Mono', monospace; font-size: .72rem;
+  color: var(--gold); letter-spacing: .2em; text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  opacity: 0; animation: fadeUp .8s .2s forwards;
+}
+.hero-tag::before { content: ''; width: 24px; height: 1px; background: var(--gold); }
+.hero-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(3.5rem, 7vw, 6rem);
+  font-weight: 700; line-height: 1.05;
+  color: var(--text); margin-bottom: .5rem;
+  opacity: 0; animation: fadeUp .8s .35s forwards;
+}
+.hero-name em {
+  font-style: italic; color: var(--gold);
+  background: linear-gradient(135deg, var(--gold), var(--gold2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.hero-title {
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  color: var(--muted); font-weight: 300; margin-bottom: 1.8rem;
+  opacity: 0; animation: fadeUp .8s .5s forwards;
+}
+.hero-desc {
+  font-size: .95rem; color: var(--muted); line-height: 1.8;
+  max-width: 480px; margin-bottom: 2.5rem;
+  opacity: 0; animation: fadeUp .8s .65s forwards;
+}
+.hero-actions {
+  display: flex; gap: 1rem; align-items: center;
+  opacity: 0; animation: fadeUp .8s .8s forwards;
+}
+.btn-primary {
+  display: inline-flex; align-items: center; gap: .5rem;
+  background: var(--gold); color: var(--bg);
+  font-size: .8rem; font-weight: 600; letter-spacing: .1em;
+  text-transform: uppercase; padding: .9rem 2rem;
+  text-decoration: none; border-radius: 2px;
+  transition: background .2s, transform .2s, box-shadow .2s;
+}
+.btn-primary:hover { background: var(--gold2); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(201,168,76,.3); }
+.btn-ghost {
+  display: inline-flex; align-items: center; gap: .5rem;
+  color: var(--muted); font-size: .8rem; font-weight: 500;
+  letter-spacing: .1em; text-transform: uppercase;
+  text-decoration: none; border-bottom: 1px solid var(--border);
+  padding-bottom: 2px;
+  transition: color .2s, border-color .2s;
+}
+.btn-ghost:hover { color: var(--text); border-color: var(--muted); }
+
+/* Hero right — code card */
+.hero-card {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px; overflow: hidden;
+  opacity: 0; animation: fadeIn .8s 1s forwards;
+}
+.card-topbar {
+  background: var(--bg2); padding: .8rem 1rem;
+  display: flex; align-items: center; gap: .5rem;
+  border-bottom: 1px solid var(--border);
+}
+.dot { width: 10px; height: 10px; border-radius: 50%; }
+.dot.red   { background: #ff5f57; }
+.dot.yellow{ background: #febc2e; }
+.dot.green { background: #28c840; }
+.card-filename {
+  margin-left: auto; margin-right: auto;
+  font-family: 'DM Mono', monospace; font-size: .7rem; color: var(--muted);
+}
+.card-body { padding: 1.5rem; }
+.code-line {
+  font-family: 'DM Mono', monospace; font-size: .78rem;
+  line-height: 1.9; display: block;
+}
+.c-comment { color: #5c6370; }
+.c-keyword  { color: #c678dd; }
+.c-string   { color: #98c379; }
+.c-var      { color: #e06c75; }
+.c-fn       { color: #61afef; }
+.c-gold     { color: var(--gold); }
+.c-num      { color: #d19a66; }
+.hero-status {
+  display: flex; align-items: center; gap: .6rem;
+  font-family: 'DM Mono', monospace; font-size: .7rem; color: var(--muted);
+  padding: .8rem 1.5rem; border-top: 1px solid var(--border);
+}
+.status-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #28c840; animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(40,200,64,.4); }
+  50%      { box-shadow: 0 0 0 5px rgba(40,200,64,0); }
+}
+.hero-scroll {
+  position: absolute; bottom: 2.5rem; left: 50%;
+  transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: .5rem;
+  font-family: 'DM Mono', monospace; font-size: .65rem;
+  color: var(--muted); letter-spacing: .15em; text-transform: uppercase;
+  opacity: 0; animation: fadeIn 1s 1.5s forwards;
+}
+.scroll-line {
+  width: 1px; height: 40px;
+  background: linear-gradient(to bottom, var(--gold), transparent);
+  animation: scrollLine 2s infinite;
+}
+@keyframes scrollLine {
+  0% { transform: scaleY(0); transform-origin: top; }
+  50% { transform: scaleY(1); transform-origin: top; }
+  51% { transform: scaleY(1); transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
+}
+
+/* ── SECTION BASE ── */
+section { padding: 7rem 3rem; position: relative; z-index: 1; }
+.container { max-width: 1200px; margin: 0 auto; }
+.section-label {
+  font-family: 'DM Mono', monospace; font-size: .7rem;
+  color: var(--gold); letter-spacing: .25em; text-transform: uppercase;
+  display: flex; align-items: center; gap: .8rem; margin-bottom: 1rem;
+}
+.section-label::before { content: ''; width: 30px; height: 1px; background: var(--gold); }
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 600;
+  color: var(--text); line-height: 1.2; margin-bottom: 1rem;
+}
+.section-title em { font-style: italic; color: var(--gold); }
+
+/* ── SKILLS ── */
+#skills { background: var(--bg2); }
+.skills-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem; margin-top: 3.5rem;
+}
+.skill-card {
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 6px; padding: 1.8rem;
+  transition: border-color .3s, transform .3s, box-shadow .3s;
+  position: relative; overflow: hidden;
+}
+.skill-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0;
+  height: 2px; background: linear-gradient(90deg, var(--gold), transparent);
+  transform: scaleX(0); transition: transform .4s ease;
+  transform-origin: left;
+}
+.skill-card:hover { border-color: rgba(201,168,76,.3); transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,.4); }
+.skill-card:hover::before { transform: scaleX(1); }
+.skill-icon { font-size: 1.8rem; margin-bottom: 1rem; }
+.skill-name { font-size: .95rem; font-weight: 600; color: var(--text); margin-bottom: .4rem; }
+.skill-desc { font-size: .82rem; color: var(--muted); line-height: 1.6; margin-bottom: 1.2rem; }
+.skill-tags { display: flex; flex-wrap: wrap; gap: .4rem; }
+.tag {
+  font-family: 'DM Mono', monospace; font-size: .65rem;
+  padding: .25rem .7rem; border-radius: 2px;
+  background: rgba(201,168,76,.1); color: var(--gold);
+  border: 1px solid rgba(201,168,76,.2);
+}
+
+/* ── PROJECTS ── */
+#projects { background: var(--bg); }
+.projects-grid {
+  display: grid; grid-template-columns: repeat(12, 1fr);
+  gap: 1.5rem; margin-top: 3.5rem;
+}
+.project-card {
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 6px; overflow: hidden;
+  transition: transform .3s, box-shadow .3s, border-color .3s;
+  cursor: none;
+}
+.project-card:hover { transform: translateY(-6px); box-shadow: 0 24px 60px rgba(0,0,0,.5); border-color: rgba(201,168,76,.25); }
+.project-card.featured { grid-column: span 7; }
+.project-card.side     { grid-column: span 5; }
+.project-card.half     { grid-column: span 6; }
+.project-header {
+  padding: 1.5rem 1.8rem 0;
+  display: flex; justify-content: space-between; align-items: flex-start;
+}
+.project-num {
+  font-family: 'DM Mono', monospace; font-size: .65rem;
+  color: var(--muted); letter-spacing: .15em;
+}
+.project-links { display: flex; gap: .8rem; }
+.project-link {
+  width: 30px; height: 30px; border-radius: 50%;
+  border: 1px solid var(--border); display: flex; align-items: center;
+  justify-content: center; color: var(--muted); font-size: .75rem;
+  text-decoration: none; transition: all .2s; cursor: none;
+}
+.project-link:hover { border-color: var(--gold); color: var(--gold); }
+.project-img {
+  margin: 1.2rem 1.8rem; border-radius: 4px;
+  height: 160px; display: flex; align-items: center; justify-content: center;
+  font-size: 3.5rem; position: relative; overflow: hidden;
+}
+.project-img.blue   { background: linear-gradient(135deg, #0f1f3d, #1a3a6e); }
+.project-img.green  { background: linear-gradient(135deg, #0d2b1a, #1a4d2e); }
+.project-img.purple { background: linear-gradient(135deg, #1a0d2e, #2d1a4d); }
+.project-img.gold   { background: linear-gradient(135deg, #2b1d07, #4d3410); }
+.project-img.teal   { background: linear-gradient(135deg, #0d2626, #1a4040); }
+.project-img::after {
+  content: ''; position: absolute; inset: 0;
+  background: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,.01) 20px, rgba(255,255,255,.01) 21px);
+}
+.project-body { padding: 0 1.8rem 1.8rem; }
+.project-cat {
+  font-family: 'DM Mono', monospace; font-size: .65rem;
+  color: var(--gold); letter-spacing: .15em; text-transform: uppercase;
+  margin-bottom: .5rem;
+}
+.project-name { font-size: 1.05rem; font-weight: 600; color: var(--text); margin-bottom: .5rem; }
+.project-desc { font-size: .82rem; color: var(--muted); line-height: 1.6; margin-bottom: 1rem; }
+.project-tech { display: flex; flex-wrap: wrap; gap: .4rem; }
+.tech-pill {
+  font-family: 'DM Mono', monospace; font-size: .62rem;
+  padding: .2rem .65rem; border-radius: 2px;
+  background: rgba(79,142,247,.1); color: #7ab8ff;
+  border: 1px solid rgba(79,142,247,.2);
+}
+
+/* ── EXPERIENCE ── */
+#experience { background: var(--bg2); }
+.exp-layout { display: grid; grid-template-columns: 1fr 2fr; gap: 4rem; margin-top: 3.5rem; }
+.exp-list { display: flex; flex-direction: column; gap: 0; }
+.exp-item {
+  padding: 1.2rem 1.5rem; border-left: 2px solid var(--border);
+  cursor: none; transition: border-color .2s;
+  position: relative;
+}
+.exp-item.active, .exp-item:hover { border-color: var(--gold); }
+.exp-item.active::before {
+  content: ''; position: absolute; left: -5px; top: 1.4rem;
+  width: 8px; height: 8px; border-radius: 50%; background: var(--gold);
+}
+.exp-company { font-size: .85rem; font-weight: 600; color: var(--text); }
+.exp-period  { font-family: 'DM Mono', monospace; font-size: .68rem; color: var(--muted); margin-top: .2rem; }
+.exp-detail { display: none; }
+.exp-detail.active { display: block; }
+.exp-role { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 600; color: var(--text); margin-bottom: .5rem; }
+.exp-at { color: var(--gold); }
+.exp-date-range {
+  font-family: 'DM Mono', monospace; font-size: .72rem;
+  color: var(--muted); margin-bottom: 1.5rem; letter-spacing: .1em;
+}
+.exp-points { list-style: none; display: flex; flex-direction: column; gap: .7rem; }
+.exp-points li {
+  font-size: .88rem; color: var(--muted); padding-left: 1.2rem;
+  position: relative; line-height: 1.6;
+}
+.exp-points li::before { content: '▸'; position: absolute; left: 0; color: var(--gold); }
+.exp-skills { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: 1.5rem; }
+
+/* ── STATS ── */
+#stats { background: var(--bg); padding: 5rem 3rem; }
+.stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; max-width: 900px; margin: 0 auto; }
+.stat-item { text-align: center; padding: 2rem; border: 1px solid var(--border); border-radius: 4px; }
+.stat-num {
+  font-family: 'Cormorant Garamond', serif; font-size: 3.5rem; font-weight: 700;
+  background: linear-gradient(135deg, var(--gold), var(--gold2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  line-height: 1;
+}
+.stat-label { font-size: .78rem; color: var(--muted); margin-top: .5rem; letter-spacing: .05em; }
+
+/* ── CONTACT ── */
+#contact { background: var(--bg2); }
+.contact-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; margin-top: 3.5rem; align-items: start; }
+.contact-intro { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; line-height: 1.5; color: var(--text); font-weight: 300; margin-bottom: 2rem; }
+.contact-intro em { font-style: italic; color: var(--gold); }
+.contact-links { display: flex; flex-direction: column; gap: 1rem; }
+.contact-link {
+  display: flex; align-items: center; gap: 1rem;
+  text-decoration: none; color: var(--muted);
+  padding: 1rem 1.2rem; border: 1px solid var(--border); border-radius: 4px;
+  transition: all .2s; cursor: none;
+}
+.contact-link:hover { border-color: rgba(201,168,76,.4); color: var(--text); transform: translateX(4px); }
+.contact-link-icon {
+  width: 36px; height: 36px; border-radius: 4px;
+  background: rgba(201,168,76,.1); color: var(--gold);
+  display: flex; align-items: center; justify-content: center;
+  font-size: .9rem; flex-shrink: 0;
+}
+.contact-link-text { font-size: .85rem; }
+.contact-link-label { font-size: .7rem; color: var(--muted); display: block; }
+
+/* Contact form */
+.form-group { margin-bottom: 1.2rem; }
+.form-group label { display: block; font-size: .72rem; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; margin-bottom: .5rem; }
+.form-group input,
+.form-group textarea {
+  width: 100%; background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 4px; color: var(--text); font-family: 'DM Sans', sans-serif;
+  font-size: .88rem; padding: .8rem 1rem;
+  transition: border-color .2s; outline: none; resize: vertical;
+}
+.form-group input:focus,
+.form-group textarea:focus { border-color: rgba(201,168,76,.5); }
+.form-group textarea { min-height: 120px; }
+.btn-submit {
+  width: 100%; background: var(--gold); color: var(--bg);
+  border: none; border-radius: 4px; padding: 1rem;
+  font-family: 'DM Sans', sans-serif; font-size: .82rem;
+  font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+  cursor: none; transition: background .2s, transform .2s;
+}
+.btn-submit:hover { background: var(--gold2); transform: translateY(-2px); }
+
+/* ── FOOTER ── */
+footer {
+  background: var(--bg); padding: 2rem 3rem;
+  display: flex; justify-content: space-between; align-items: center;
+  border-top: 1px solid var(--border);
+}
+.footer-copy { font-family: 'DM Mono', monospace; font-size: .68rem; color: var(--muted); }
+.footer-name { color: var(--gold); }
+.footer-social { display: flex; gap: 1.2rem; }
+.footer-social a {
+  font-family: 'DM Mono', monospace; font-size: .68rem; color: var(--muted);
+  text-decoration: none; transition: color .2s;
+}
+.footer-social a:hover { color: var(--gold); }
+
+/* ── Animations ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.reveal {
+  opacity: 0; transform: translateY(24px);
+  transition: opacity .7s ease, transform .7s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  nav { padding: 1.2rem 1.5rem; }
+  .nav-links { display: none; }
+  section { padding: 5rem 1.5rem; }
+  #hero { padding: 7rem 1.5rem 4rem; }
+  .hero-grid { grid-template-columns: 1fr; gap: 3rem; }
+  .hero-card { display: none; }
+  .projects-grid { grid-template-columns: 1fr; }
+  .project-card.featured, .project-card.side, .project-card.half { grid-column: span 1; }
+  .exp-layout { grid-template-columns: 1fr; }
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
+  .contact-layout { grid-template-columns: 1fr; }
+  footer { flex-direction: column; gap: 1rem; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- Cursor -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">W<span>.</span>dev</a>
+  <ul class="nav-links">
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Hire Me</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg-lines"></div>
+  <div class="hero-grid">
+    <div class="hero-left">
+      <div class="hero-tag">Full Stack Developer</div>
+      <h1 class="hero-name">Waris<br/><em>Buengkerd</em></h1>
+      <p class="hero-title">Flutter · React · Node.js · Educational & Islamic Apps</p>
+      <p class="hero-desc">
+        นักพัฒนา Full Stack ที่เชี่ยวชาญด้าน Mobile และ Web Applications
+        โดยเฉพาะระบบการศึกษา และ Islamic Applications 
+        พร้อม deploy บน production environment ด้วย Docker
+      </p>
+      <div class="hero-actions">
+        <a href="#projects" class="btn-primary">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          ดูผลงาน
+        </a>
+        <a href="#contact" class="btn-ghost">
+          ติดต่อฉัน
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-card">
+      <div class="card-topbar">
+        <div class="dot red"></div>
+        <div class="dot yellow"></div>
+        <div class="dot green"></div>
+        <span class="card-filename">waris.profile.ts</span>
+      </div>
+      <div class="card-body">
+        <span class="code-line"><span class="c-keyword">const</span> <span class="c-var">developer</span> = {</span>
+        <span class="code-line">  <span class="c-fn">name</span>: <span class="c-string">"Waris Buengkerd"</span>,</span>
+        <span class="code-line">  <span class="c-fn">role</span>: <span class="c-string">"Full Stack Developer"</span>,</span>
+        <span class="code-line">  <span class="c-fn">experience</span>: <span class="c-num">5</span><span class="c-comment">+ years</span>,</span>
+        <span class="code-line">  <span class="c-fn">stack</span>: [</span>
+        <span class="code-line">    <span class="c-string">"Flutter"</span>, <span class="c-string">"React"</span>, <span class="c-string">"Next.js"</span>,</span>
+        <span class="code-line">    <span class="c-string">"Node.js"</span>, <span class="c-string">"MySQL"</span>, <span class="c-string">"Docker"</span></span>
+        <span class="code-line">  ],</span>
+        <span class="code-line">  <span class="c-fn">specialties</span>: [</span>
+        <span class="code-line">    <span class="c-string">"Educational Apps"</span>,</span>
+        <span class="code-line">    <span class="c-string">"Islamic Finance Systems"</span>,</span>
+        <span class="code-line">    <span class="c-string">"Gamification"</span></span>
+        <span class="code-line">  ],</span>
+        <span class="code-line">  <span class="c-fn">available</span>: <span class="c-gold">true</span> <span class="c-comment">// open to work</span></span>
+        <span class="code-line">}</span>
+      </div>
+      <div class="hero-status">
+        <div class="status-dot"></div>
+        Available for freelance & full-time
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    Scroll
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">What I Do</div>
+      <h2 class="section-title">ความเชี่ยวชาญ<br/><em>& เทคโนโลยี</em></h2>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-card reveal">
+        <div class="skill-icon">📱</div>
+        <div class="skill-name">Mobile Development</div>
+        <div class="skill-desc">พัฒนา App iOS & Android ด้วย Flutter พร้อม animations, gamification และ custom UI components</div>
+        <div class="skill-tags">
+          <span class="tag">Flutter</span>
+          <span class="tag">Dart</span>
+          <span class="tag">Firebase</span>
+          <span class="tag">BLoC</span>
+        </div>
+      </div>
+      <div class="skill-card reveal">
+        <div class="skill-icon">🌐</div>
+        <div class="skill-name">Web Frontend</div>
+        <div class="skill-desc">สร้าง Web App ที่สวยงาม responsive ด้วย React และ Next.js พร้อม UX ที่ดีเยี่ยม</div>
+        <div class="skill-tags">
+          <span class="tag">React</span>
+          <span class="tag">Next.js</span>
+          <span class="tag">TypeScript</span>
+          <span class="tag">Tailwind</span>
+        </div>
+      </div>
+      <div class="skill-card reveal">
+        <div class="skill-icon">⚙️</div>
+        <div class="skill-name">Backend & API</div>
+        <div class="skill-desc">ออกแบบและพัฒนา RESTful API ที่มั่นคง รองรับ authentication, file upload และ role-based access</div>
+        <div class="skill-tags">
+          <span class="tag">Node.js</span>
+          <span class="tag">Express</span>
+          <span class="tag">JWT</span>
+          <span class="tag">MySQL</span>
+        </div>
+      </div>
+      <div class="skill-card reveal">
+        <div class="skill-icon">🕌</div>
+        <div class="skill-name">Islamic Applications</div>
+        <div class="skill-desc">เชี่ยวชาญพิเศษด้าน Islamic Finance, Quran Apps และระบบที่ต้องการความเข้าใจหลักการอิสลาม</div>
+        <div class="skill-tags">
+          <span class="tag">Murabaha</span>
+          <span class="tag">Quran API</span>
+          <span class="tag">Islamic UX</span>
+        </div>
+      </div>
+      <div class="skill-card reveal">
+        <div class="skill-icon">🎮</div>
+        <div class="skill-name">Educational & Gamification</div>
+        <div class="skill-desc">สร้างแอปการศึกษาสำหรับเด็ก พร้อม gamification, achievement systems, particle effects และ animations</div>
+        <div class="skill-tags">
+          <span class="tag">Game Design</span>
+          <span class="tag">Bezier Curves</span>
+          <span class="tag">Speech-to-Text</span>
+        </div>
+      </div>
+      <div class="skill-card reveal">
+        <div class="skill-icon">🐳</div>
+        <div class="skill-name">DevOps & Deployment</div>
+        <div class="skill-desc">Deploy ระบบขึ้น production ด้วย Docker, nginx, SSL และตั้งค่า CI/CD pipeline</div>
+        <div class="skill-tags">
+          <span class="tag">Docker</span>
+          <span class="tag">Nginx</span>
+          <span class="tag">Ubuntu</span>
+          <span class="tag">WSL2</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Portfolio</div>
+      <h2 class="section-title">ผลงาน<em>ที่ผ่านมา</em></h2>
+    </div>
+    <div class="projects-grid">
+
+      <!-- Featured -->
+      <div class="project-card featured reveal">
+        <div class="project-header">
+          <span class="project-num">01</span>
+          <div class="project-links">
+            <a href="#" class="project-link" title="Source">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            </a>
+            <a href="#" class="project-link" title="Live">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </a>
+          </div>
+        </div>
+        <div class="project-img blue">🕌</div>
+        <div class="project-body">
+          <div class="project-cat">Islamic Finance System</div>
+          <div class="project-name">Islamic Loan Management System</div>
+          <div class="project-desc">ระบบจัดการสินเชื่ออิสลามแบบ Murabaha สำหรับองค์กรการเงินอิสลาม รองรับผู้ใช้หลายระดับ คำนวณกำไรตามหลักการอิสลาม พร้อม Docker deployment</div>
+          <div class="project-tech">
+            <span class="tech-pill">React</span>
+            <span class="tech-pill">Node.js</span>
+            <span class="tech-pill">MySQL</span>
+            <span class="tech-pill">Docker</span>
+            <span class="tech-pill">Nginx</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card side reveal">
+        <div class="project-header">
+          <span class="project-num">02</span>
+          <div class="project-links">
+            <a href="#" class="project-link"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></a>
+          </div>
+        </div>
+        <div class="project-img green">📖</div>
+        <div class="project-body">
+          <div class="project-cat">Islamic Mobile App</div>
+          <div class="project-name">Quran Reading App</div>
+          <div class="project-desc">แอปอ่านอัลกุรอานด้วย Flutter รองรับ audio playback, verse highlighting, เลือก reciter และ offline mode</div>
+          <div class="project-tech">
+            <span class="tech-pill">Flutter</span>
+            <span class="tech-pill">Dart</span>
+            <span class="tech-pill">AlQuran API</span>
+            <span class="tech-pill">Audio</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card half reveal">
+        <div class="project-header">
+          <span class="project-num">03</span>
+          <div class="project-links">
+            <a href="#" class="project-link"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></a>
+          </div>
+        </div>
+        <div class="project-img purple">✏️</div>
+        <div class="project-body">
+          <div class="project-cat">Educational App · Flutter</div>
+          <div class="project-name">Children's Tracing Game</div>
+          <div class="project-desc">เกมฝึกเขียนสำหรับเด็กพร้อม Bezier curves, particle effects และ gamification เต็มรูปแบบ</div>
+          <div class="project-tech">
+            <span class="tech-pill">Flutter</span>
+            <span class="tech-pill">Canvas</span>
+            <span class="tech-pill">Particles</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card half reveal">
+        <div class="project-header">
+          <span class="project-num">04</span>
+          <div class="project-links">
+            <a href="#" class="project-link"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></a>
+          </div>
+        </div>
+        <div class="project-img teal">🎤</div>
+        <div class="project-body">
+          <div class="project-cat">AI · Educational App</div>
+          <div class="project-name">Pronunciation Practice App</div>
+          <div class="project-desc">แอปฝึกออกเสียงสำหรับเด็ก ใช้ Hugging Face Whisper model สำหรับ Speech-to-Text วิเคราะห์คะแนน</div>
+          <div class="project-tech">
+            <span class="tech-pill">Flutter</span>
+            <span class="tech-pill">Whisper AI</span>
+            <span class="tech-pill">Speech-to-Text</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card half reveal">
+        <div class="project-header">
+          <span class="project-num">05</span>
+        </div>
+        <div class="project-img gold">🏦</div>
+        <div class="project-body">
+          <div class="project-cat">Educational App · Flutter</div>
+          <div class="project-name">Piggy Bank Savings App</div>
+          <div class="project-desc">แอปออมเงินสำหรับเด็กพร้อม achievement system, progress tracking และ animations ที่น่ารัก</div>
+          <div class="project-tech">
+            <span class="tech-pill">Flutter</span>
+            <span class="tech-pill">Gamification</span>
+            <span class="tech-pill">Achievements</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card half reveal">
+        <div class="project-header">
+          <span class="project-num">06</span>
+        </div>
+        <div class="project-img blue">🗺️</div>
+        <div class="project-body">
+          <div class="project-cat">Real-time App · Flutter</div>
+          <div class="project-name">Emergency Mapping System</div>
+          <div class="project-desc">ระบบแผนที่ฉุกเฉิน real-time coordination ด้วย Firebase และ Google Maps Integration</div>
+          <div class="project-tech">
+            <span class="tech-pill">Flutter</span>
+            <span class="tech-pill">Firebase</span>
+            <span class="tech-pill">Google Maps</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section id="stats">
+  <div class="container">
+    <div class="stats-row">
+      <div class="stat-item reveal">
+        <div class="stat-num">5+</div>
+        <div class="stat-label">ปีประสบการณ์</div>
+      </div>
+      <div class="stat-item reveal">
+        <div class="stat-num">20+</div>
+        <div class="stat-label">โปรเจคที่ผ่านมา</div>
+      </div>
+      <div class="stat-item reveal">
+        <div class="stat-num">2</div>
+        <div class="stat-label">Platform (iOS & Android)</div>
+      </div>
+      <div class="stat-item reveal">
+        <div class="stat-num">∞</div>
+        <div class="stat-label">ความตั้งใจเรียนรู้</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Career</div>
+      <h2 class="section-title">ประสบการณ์<em>การทำงาน</em></h2>
+    </div>
+    <div class="exp-layout">
+      <div class="exp-list reveal">
+        <div class="exp-item active" onclick="showExp(0, this)">
+          <div class="exp-company">Freelance Developer</div>
+          <div class="exp-period">2022 — ปัจจุบัน</div>
+        </div>
+        <div class="exp-item" onclick="showExp(1, this)">
+          <div class="exp-company">Educational Tech</div>
+          <div class="exp-period">2021 — 2022</div>
+        </div>
+        <div class="exp-item" onclick="showExp(2, this)">
+          <div class="exp-company">Islamic Finance Project</div>
+          <div class="exp-period">2023 — 2024</div>
+        </div>
+      </div>
+      <div>
+        <div class="exp-detail active" id="exp-0">
+          <div class="exp-role">Full Stack <span class="exp-at">Freelancer</span></div>
+          <div class="exp-date-range">2022 — PRESENT · Remote</div>
+          <ul class="exp-points">
+            <li>พัฒนา Mobile App ด้วย Flutter สำหรับลูกค้าทั้งในและต่างประเทศ</li>
+            <li>สร้าง Web Applications ด้วย React + Node.js + MySQL</li>
+            <li>ออกแบบ UI/UX และ implement animations พร้อม gamification</li>
+            <li>Deploy ระบบบน VPS ด้วย Docker + Nginx + SSL</li>
+            <li>พัฒนา AI-powered features ด้วย Hugging Face models</li>
+          </ul>
+          <div class="exp-skills">
+            <span class="tag">Flutter</span><span class="tag">React</span>
+            <span class="tag">Node.js</span><span class="tag">MySQL</span>
+            <span class="tag">Docker</span><span class="tag">Firebase</span>
+          </div>
+        </div>
+        <div class="exp-detail" id="exp-1">
+          <div class="exp-role">Mobile App <span class="exp-at">Developer</span></div>
+          <div class="exp-date-range">2021 — 2022 · Educational Technology</div>
+          <ul class="exp-points">
+            <li>พัฒนา Educational Apps สำหรับเด็ก เน้น gamification และ interactivity</li>
+            <li>สร้างเกมฝึกเขียนด้วย Flutter Canvas API พร้อม Bezier curves</li>
+            <li>ออกแบบ achievement system และ particle effects</li>
+            <li>บูรณาการ Speech-to-Text API เพื่อฝึกออกเสียงภาษา</li>
+          </ul>
+          <div class="exp-skills">
+            <span class="tag">Flutter</span><span class="tag">Dart</span>
+            <span class="tag">Canvas API</span><span class="tag">Gamification</span>
+          </div>
+        </div>
+        <div class="exp-detail" id="exp-2">
+          <div class="exp-role">Islamic Finance <span class="exp-at">Developer</span></div>
+          <div class="exp-date-range">2023 — 2024 · Islamic Finance</div>
+          <ul class="exp-points">
+            <li>พัฒนาระบบ Islamic Loan Management System ตามหลัก Murabaha</li>
+            <li>ออกแบบ Database Schema สำหรับ Islamic Finance</li>
+            <li>สร้าง Role-based Access Control และ Authentication</li>
+            <li>Deploy ด้วย Docker บน Windows WSL2 สำหรับ client</li>
+          </ul>
+          <div class="exp-skills">
+            <span class="tag">React</span><span class="tag">Node.js</span>
+            <span class="tag">MySQL</span><span class="tag">Docker</span><span class="tag">WSL2</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Let's Work Together</div>
+      <h2 class="section-title">ติดต่อ<em>ฉัน</em></h2>
+    </div>
+    <div class="contact-layout">
+      <div class="reveal">
+        <p class="contact-intro">
+          กำลังมองหา <em>developer ที่เชี่ยวชาญ</em><br/>
+          ด้าน Mobile, Web หรือ Islamic Apps?<br/>
+          ยินดีพูดคุยเสมอครับ
+        </p>
+        <div class="contact-links">
+          <a href="mailto:waris@example.com" class="contact-link">
+            <div class="contact-link-icon">✉</div>
+            <div class="contact-link-text">
+              <span class="contact-link-label">Email</span>
+              waris@example.com
+            </div>
+          </a>
+          <a href="https://linkedin.com/in/waris" class="contact-link">
+            <div class="contact-link-icon">in</div>
+            <div class="contact-link-text">
+              <span class="contact-link-label">LinkedIn</span>
+              linkedin.com/in/waris
+            </div>
+          </a>
+          <a href="https://github.com/waris" class="contact-link">
+            <div class="contact-link-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+            </div>
+            <div class="contact-link-text">
+              <span class="contact-link-label">GitHub</span>
+              github.com/waris
+            </div>
+          </a>
+          <a href="https://upwork.com/freelancers/waris" class="contact-link">
+            <div class="contact-link-icon">⬆</div>
+            <div class="contact-link-text">
+              <span class="contact-link-label">Upwork</span>
+              Available for hire
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="reveal">
+        <form onsubmit="handleSubmit(event)">
+          <div class="form-group">
+            <label>ชื่อ / Name</label>
+            <input type="text" placeholder="คุณ / Your name" required/>
+          </div>
+          <div class="form-group">
+            <label>อีเมล / Email</label>
+            <input type="email" placeholder="email@example.com" required/>
+          </div>
+          <div class="form-group">
+            <label>ประเภทงาน / Project type</label>
+            <input type="text" placeholder="Mobile App, Web, Islamic App..."/>
+          </div>
+          <div class="form-group">
+            <label>รายละเอียด / Message</label>
+            <textarea placeholder="บอกเล่าโปรเจคของคุณ..." required></textarea>
+          </div>
+          <button type="submit" class="btn-submit" id="submit-btn">ส่งข้อความ →</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-copy">
+    © 2025 <span class="footer-name">Waris Buengkerd</span> — Built with ❤️ & ☕
+  </div>
+  <div class="footer-social">
+    <a href="#">GitHub</a>
+    <a href="#">LinkedIn</a>
+    <a href="#">Upwork</a>
+    <a href="#">Fastwork</a>
+  </div>
+</footer>
+
+<script>
+// ── Cursor ──
+const cursor = document.getElementById('cursor');
+const ring   = document.getElementById('cursor-ring');
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top  = e.clientY + 'px';
+  setTimeout(() => {
+    ring.style.left = e.clientX + 'px';
+    ring.style.top  = e.clientY + 'px';
+  }, 80);
+});
+
+// ── Nav scroll ──
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// ── Reveal on scroll ──
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+    }
+  });
+}, { threshold: 0.1 });
+reveals.forEach(el => observer.observe(el));
+
+// ── Experience tabs ──
+function showExp(idx, el) {
+  document.querySelectorAll('.exp-item').forEach(i => i.classList.remove('active'));
+  document.querySelectorAll('.exp-detail').forEach(d => d.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('exp-' + idx).classList.add('active');
+}
+
+// ── Form submit ──
+function handleSubmit(e) {
+  e.preventDefault();
+  const btn = document.getElementById('submit-btn');
+  btn.textContent = 'ส่งแล้ว ✓';
+  btn.style.background = '#28c840';
+  setTimeout(() => {
+    btn.textContent = 'ส่งข้อความ →';
+    btn.style.background = '';
+    e.target.reset();
+  }, 3000);
+}
+</script>
+</body>
+</html>
