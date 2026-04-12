@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Privacy Policy – ZenTask</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0f0f13;
+      --surface: #16161d;
+      --surface2: #1e1e28;
+      --border: #2a2a38;
+      --accent: #7c6ff7;
+      --accent2: #a78bfa;
+      --text: #e8e8f0;
+      --muted: #8888a8;
+      --tag-bg: #1e1e38;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.75;
+      min-height: 100vh;
+    }
+
+    /* Glow background */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -20%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 500px;
+      background: radial-gradient(ellipse, rgba(124,111,247,0.12) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 60px 24px 100px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 64px;
+      padding-bottom: 48px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .app-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--tag-bg);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 6px 16px;
+      font-size: 13px;
+      color: var(--accent2);
+      letter-spacing: 0.05em;
+      margin-bottom: 28px;
+    }
+
+    .app-badge::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--accent);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 400;
+      line-height: 1.2;
+      color: #fff;
+      margin-bottom: 16px;
+    }
+
+    h1 span {
+      color: var(--accent2);
+    }
+
+    .meta {
+      font-size: 13px;
+      color: var(--muted);
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    /* Language toggle */
+    .lang-toggle {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 48px;
+    }
+
+    .lang-btn {
+      padding: 8px 24px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .lang-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    .lang-btn:hover:not(.active) {
+      border-color: var(--accent2);
+      color: var(--accent2);
+    }
+
+    /* Content sections */
+    .content { display: none; }
+    .content.active { display: block; }
+
+    .section {
+      margin-bottom: 40px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 20px 28px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface2);
+    }
+
+    .section-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: var(--tag-bg);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: var(--accent2);
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .section h2 {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: #fff;
+      letter-spacing: 0.01em;
+    }
+
+    .section-body {
+      padding: 24px 28px;
+      color: var(--muted);
+      font-size: 14.5px;
+    }
+
+    .section-body p { margin-bottom: 12px; }
+    .section-body p:last-child { margin-bottom: 0; }
+
+    /* Sub-section */
+    .subsection {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .subsection h3 {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent2);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 10px;
+    }
+
+    /* List */
+    .list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 14.5px;
+      color: var(--muted);
+    }
+
+    .list li::before {
+      content: '→';
+      color: var(--accent);
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .list.cross li::before { content: '✗'; color: #f87171; }
+
+    /* Table */
+    .table-wrap {
+      overflow-x: auto;
+      margin-top: 8px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th {
+      text-align: left;
+      padding: 10px 16px;
+      background: var(--surface2);
+      color: var(--accent2);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+    }
+
+    td {
+      padding: 12px 16px;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    tr:last-child td { border-bottom: none; }
+
+    td:first-child { color: var(--text); font-weight: 500; }
+
+    /* Link */
+    a {
+      color: var(--accent2);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.2s;
+    }
+
+    a:hover { border-color: var(--accent2); }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding-top: 48px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .footer strong { color: var(--text); }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+
+    .note {
+      margin-top: 16px;
+      padding: 14px 18px;
+      background: var(--tag-bg);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 8px;
+      font-size: 13.5px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="app-badge">ZenTask AI</div>
+    <h1>Privacy <span>Policy</span></h1>
+    <div class="meta">
+      <span>Effective: January 1, 2025</span>
+      <span>Last Updated: January 1, 2025</span>
+    </div>
+  </div>
+
+  <!-- Language Toggle -->
+  <div class="lang-toggle">
+    <button class="lang-btn active" onclick="setLang('th')">ภาษาไทย</button>
+    <button class="lang-btn" onclick="setLang('en')">English</button>
+  </div>
+
+  <!-- THAI CONTENT -->
+  <div class="content active" id="content-th">
+
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">1</div>
+        <h2>บทนำ</h2>
+      </div>
+      <div class="section-body">
+        <p>ZenTask ("แอป", "เรา") เป็นแอปพลิเคชันจัดการงานและ To-do list ที่พัฒนาโดย Waris (www.warisapps.cloud) นโยบายความเป็นส่วนตัวนี้อธิบายถึงวิธีที่เราจัดการข้อมูลของผู้ใช้งาน</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">2</div>
+        <h2>ข้อมูลที่เก็บรวบรวม</h2>
+      </div>
+      <div class="section-body">
+        <div class="subsection" style="margin-top:0; padding-top:0; border-top:none;">
+          <h3>ข้อมูลที่เก็บในอุปกรณ์ของคุณ</h3>
+          <p>แอป ZenTask เก็บข้อมูลต่อไปนี้ในอุปกรณ์ของคุณเท่านั้น ไม่มีการส่งข้อมูลไปยังเซิร์ฟเวอร์ภายนอก</p>
+          <ul class="list" style="margin-top:12px;">
+            <li>ข้อมูล Task / To-do เช่น ชื่องาน, รายละเอียด, วันครบกำหนด, สถานะ</li>
+            <li>การตั้งค่าการแจ้งเตือน เช่น เวลาแจ้งเตือน, ความถี่</li>
+          </ul>
+        </div>
+        <div class="subsection">
+          <h3>ข้อมูลที่เราไม่เก็บ</h3>
+          <ul class="list cross">
+            <li>ชื่อ-นามสกุล หรืออีเมล</li>
+            <li>เบอร์โทรศัพท์หรือที่อยู่</li>
+            <li>ข้อมูลการชำระเงิน</li>
+            <li>ตำแหน่งที่ตั้ง (Location/GPS)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">3</div>
+        <h2>บริการของบุคคลที่สาม</h2>
+      </div>
+      <div class="section-body">
+        <div class="subsection" style="margin-top:0; padding-top:0; border-top:none;">
+          <h3>Google Firebase</h3>
+          <p>ใช้สำหรับ Analytics และตรวจสอบความเสถียรของแอป Google อาจเก็บข้อมูลการใช้งานแบบไม่ระบุตัวตน</p>
+          <p>นโยบาย Google: <a href="https://policies.google.com/privacy" target="_blank">policies.google.com/privacy</a></p>
+        </div>
+        <div class="subsection">
+          <h3>Google AdMob</h3>
+          <p>ใช้สำหรับแสดงโฆษณาในแอป Google AdMob อาจใช้ Advertising ID ของอุปกรณ์เพื่อแสดงโฆษณาที่เกี่ยวข้อง คุณสามารถปิด Personalized Ads ได้ในการตั้งค่าอุปกรณ์</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">4</div>
+        <h2>สิทธิ์การเข้าถึงอุปกรณ์</h2>
+      </div>
+      <div class="section-body">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>สิทธิ์</th><th>วัตถุประสงค์</th></tr></thead>
+            <tbody>
+              <tr><td>การแจ้งเตือน</td><td>เพื่อเตือนความจำ Task ที่ตั้งค่าไว้</td></tr>
+              <tr><td>Internet</td><td>สำหรับ Google Services และโฆษณา</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">5</div>
+        <h2>ความปลอดภัยของข้อมูล</h2>
+      </div>
+      <div class="section-body">
+        <p>ข้อมูล Task ของคุณถูกเก็บไว้ในอุปกรณ์เครื่องของคุณเท่านั้น เราไม่มีการรับส่งข้อมูลส่วนตัวผ่านเครือข่าย ทำให้ข้อมูลของคุณปลอดภัยและเป็นความลับ</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">6</div>
+        <h2>สิทธิ์ของผู้ใช้</h2>
+      </div>
+      <div class="section-body">
+        <ul class="list">
+          <li>ลบข้อมูลทั้งหมดได้ทุกเมื่อโดยการถอนการติดตั้งแอป</li>
+          <li>ปิดการแจ้งเตือนได้ในการตั้งค่าอุปกรณ์</li>
+          <li>ปิด Personalized Ads ได้ในการตั้งค่า Google บนอุปกรณ์</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">7</div>
+        <h2>เด็กและเยาวชน</h2>
+      </div>
+      <div class="section-body">
+        <p>แอป ZenTask AI ไม่ได้มุ่งเน้นสำหรับเด็กอายุต่ำกว่า 13 ปี และเราไม่มีการเก็บรวบรวมข้อมูลส่วนบุคคลของเด็กโดยเจตนา</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">8</div>
+        <h2>การเปลี่ยนแปลงนโยบาย</h2>
+      </div>
+      <div class="section-body">
+        <p>หากมีการเปลี่ยนแปลงนโยบายความเป็นส่วนตัว เราจะแจ้งให้ทราบผ่านการอัปเดตแอปหรือประกาศใน Play Store</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">9</div>
+        <h2>ติดต่อเรา</h2>
+      </div>
+      <div class="section-body">
+        <ul class="list">
+          <li>เว็บไซต์: <a href="https://www.warisapps.cloud" target="_blank">warisapps.cloud</a></li>
+          <li>อีเมล: <a href="mailto:alwaris.dev@gmial.com">contact@warisapps.cloud</a></li>
+        </ul>
+        <div class="note">นโยบายนี้มีผลบังคับใช้สำหรับแอปพลิเคชัน ZenTask บนระบบปฏิบัติการ Android</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ENGLISH CONTENT -->
+  <div class="content" id="content-en">
+
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">1</div>
+        <h2>Introduction</h2>
+      </div>
+      <div class="section-body">
+        <p>ZenTask ("App", "we", "us") is a task management and to-do list application developed by Waris (www.warisapps.cloud). This Privacy Policy explains how we handle your information when you use our App.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">2</div>
+        <h2>Information We Collect</h2>
+      </div>
+      <div class="section-body">
+        <div class="subsection" style="margin-top:0; padding-top:0; border-top:none;">
+          <h3>Data Stored on Your Device</h3>
+          <p>ZenTask AI stores the following data on your device only. No data is transmitted to external servers.</p>
+          <ul class="list" style="margin-top:12px;">
+            <li>Task / To-do data — task names, descriptions, due dates, and status</li>
+            <li>Notification settings — reminder times and frequency</li>
+          </ul>
+        </div>
+        <div class="subsection">
+          <h3>Information We Do Not Collect</h3>
+          <ul class="list cross">
+            <li>Name, email address, or phone number</li>
+            <li>Physical address</li>
+            <li>Payment information</li>
+            <li>Location data (GPS)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">3</div>
+        <h2>Third-Party Services</h2>
+      </div>
+      <div class="section-body">
+        <div class="subsection" style="margin-top:0; padding-top:0; border-top:none;">
+          <h3>Google Firebase</h3>
+          <p>Used for app analytics and crash reporting. Google may collect anonymized usage data.</p>
+          <p>Google Privacy Policy: <a href="https://policies.google.com/privacy" target="_blank">policies.google.com/privacy</a></p>
+        </div>
+        <div class="subsection">
+          <h3>Google AdMob</h3>
+          <p>Used to display advertisements. Google AdMob may use your device's Advertising ID to show relevant ads. You can opt out of personalized ads in your device's Google settings.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">4</div>
+        <h2>Device Permissions</h2>
+      </div>
+      <div class="section-body">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Permission</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td>Notifications</td><td>To send task reminders you have configured</td></tr>
+              <tr><td>Internet Access</td><td>Required for Google Services and advertisements</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">5</div>
+        <h2>Data Security</h2>
+      </div>
+      <div class="section-body">
+        <p>Your task data is stored locally on your device only. We do not transmit any personal data over the internet, keeping your information private and secure.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">6</div>
+        <h2>Your Rights</h2>
+      </div>
+      <div class="section-body">
+        <ul class="list">
+          <li>Delete all data at any time by uninstalling the App</li>
+          <li>Disable notifications through your device settings</li>
+          <li>Opt out of personalized ads through your Google account settings</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">7</div>
+        <h2>Children's Privacy</h2>
+      </div>
+      <div class="section-body">
+        <p>ZenTask AI is not directed at children under the age of 13. We do not knowingly collect personal information from children under 13.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">8</div>
+        <h2>Changes to This Policy</h2>
+      </div>
+      <div class="section-body">
+        <p>If we make changes to this Privacy Policy, we will notify you through an App update or announcement on the Play Store listing.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <div class="section-num">9</div>
+        <h2>Contact Us</h2>
+      </div>
+      <div class="section-body">
+        <ul class="list">
+          <li>Website: <a href="https://www.warisapps.cloud" target="_blank">www.warisapps.cloud</a></li>
+          <li>Email: <a href="mailto:"alwaris.dev@gmail.com">contact@warisapps.cloud</a></li>
+        </ul>
+        <div class="note">This Privacy Policy applies to the ZenTask AI application on the Android platform.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <strong>ZenTask AI</strong> · by Waris
+    <div class="footer-links">
+      <a href="https://www.warisapps.cloud" target="_blank">www.warisapps.cloud</a>
+      <a href="mailto:alwaris.dev@gmail.com">contact@warisapps.cloud</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function setLang(lang) {
+    document.querySelectorAll('.content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.lang-btn').forEach(el => el.classList.remove('active'));
+    document.getElementById('content-' + lang).classList.add('active');
+    event.target.classList.add('active');
+  }
+</script>
+</body>
+</html>
